@@ -23,6 +23,14 @@ open class FPNCountryListViewController: UITableViewController, UISearchResultsU
 		tableView.tableFooterView = UIView()
 
 		initSearchBarController()
+		
+		if #available(iOS 13.0, *) {
+            	    let rightMenuItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(dismissView))
+            	    self.navigationItem.setRightBarButton(rightMenuItem, animated: false);
+       		} else {
+            	    let leftMenuItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissView))
+            	    self.navigationItem.setLeftBarButton(leftMenuItem, animated: false);
+        	}
 	}
 
 	open func setup(repository: FPNCountryRepository) {
