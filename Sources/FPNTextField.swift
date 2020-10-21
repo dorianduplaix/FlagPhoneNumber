@@ -41,6 +41,12 @@ open class FPNTextField: UITextField {
 			phoneCodeTextField.font = font
 		}
 	}
+	
+	open var leftTextColor : UIColor? {
+     	   didSet {
+        	phoneCodeTextField.textColor = leftTextColor
+           }
+        }
 
 	open override var textColor: UIColor? {
 		didSet {
