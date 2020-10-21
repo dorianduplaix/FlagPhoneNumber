@@ -48,12 +48,6 @@ open class FPNTextField: UITextField {
            }
         }
 
-	open override var textColor: UIColor? {
-		didSet {
-			phoneCodeTextField.textColor = textColor
-		}
-	}
-
 	/// Present in the placeholder an example of a phone number according to the selected country code.
 	/// If false, you can set your own placeholder. Set to true by default.
 	@objc open var hasPhoneNumberExample: Bool = true {
