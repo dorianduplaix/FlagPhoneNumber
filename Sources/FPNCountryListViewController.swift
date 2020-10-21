@@ -32,6 +32,10 @@ open class FPNCountryListViewController: UITableViewController, UISearchResultsU
             	    self.navigationItem.setLeftBarButton(leftMenuItem, animated: false);
         	}
 	}
+	
+	@objc private func dismissView() {
+            self.dismiss(animated: true, completion: nil)
+    	}
 
 	open func setup(repository: FPNCountryRepository) {
 		self.repository = repository
