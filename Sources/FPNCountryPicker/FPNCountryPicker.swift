@@ -49,7 +49,7 @@ open class FPNCountryPicker: UIPickerView, UIPickerViewDelegate, UIPickerViewDat
 	}
 
 	open func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-		var resultView: FPNCountryView
+        var resultView: FPNCountryView
 		let country = repository!.countries[row]
 
 		if view == nil {

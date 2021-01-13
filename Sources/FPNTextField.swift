@@ -47,6 +47,21 @@ open class FPNTextField: UITextField {
         	phoneCodeTextField.textColor = leftTextColor
            }
         }
+    
+    open var noPhoneNumber: Bool = false {
+        didSet {
+            phoneCodeTextField.isHidden = noPhoneNumber
+            placeholder = nil
+            setup()
+            self.isUserInteractionEnabled = false
+            if #available(iOS 9.0, *) {
+                phoneCodeTextField.widthAnchor.constraint(equalToConstant: 0).isActive = true
+            }
+            flagButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            flagButtonSize = CGSize(width: 50, height: 50)
+            self.textAlignment = .left
+        }
+    }
 
 	/// Present in the placeholder an example of a phone number according to the selected country code.
 	/// If false, you can set your own placeholder. Set to true by default.
@@ -104,12 +119,12 @@ open class FPNTextField: UITextField {
 		setupPhoneCodeTextField()
 		setupLeftView()
 
-		keyboardType = .numberPad
-		autocorrectionType = .no
-		addTarget(self, action: #selector(didEditText), for: .editingChanged)
-		addTarget(self, action: #selector(displayNumberKeyBoard), for: .touchDown)
-
-		if let regionCode = Locale.current.regionCode, let countryCode = FPNCountryCode(rawValue: regionCode) {
+        keyboardType = .numberPad
+        autocorrectionType = .no
+        addTarget(self, action: #selector(didEditText), for: .editingChanged)
+        addTarget(self, action: #selector(displayNumberKeyBoard), for: .touchDown)
+        
+        if let regionCode = Locale.current.regionCode, let countryCode = FPNCountryCode(rawValue: regionCode) {
 			setFlag(countryCode: countryCode)
 		} else {
 			setFlag(countryCode: FPNCountryCode.FR)
@@ -149,12 +164,16 @@ open class FPNTextField: UITextField {
 		flagHeightConstraint?.isActive = true
 
 		NSLayoutConstraint(item: flagButton, attribute: .centerY, relatedBy: .equal, toItem: leftView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-
-		NSLayoutConstraint(item: flagButton, attribute: .leading, relatedBy: .equal, toItem: leftView, attribute: .leading, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: flagButton, attribute: .leading, relatedBy: .equal, toItem: leftView, attribute: .leading, multiplier: 1, constant: 0).isActive = true
+        
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .leading, relatedBy: .equal, toItem: flagButton, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .trailing, relatedBy: .equal, toItem: leftView, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .top, relatedBy: .equal, toItem: leftView, attribute: .top, multiplier: 1, constant: 0).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .bottom, relatedBy: .equal, toItem: leftView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        
+        if noPhoneNumber == true {
+            phoneCodeTextField.removeFromSuperview()
+        }
 	}
 
 	open override func updateConstraints() {
@@ -387,10 +406,15 @@ open class FPNTextField: UITextField {
 	}
 
 	private func clean(string: String) -> String {
-		var allowedCharactersSet = CharacterSet.decimalDigits
-
-		allowedCharactersSet.insert("+")
-
+        var allowedCharactersSet: CharacterSet
+        if noPhoneNumber == true {
+            allowedCharactersSet = CharacterSet.letters
+            return string
+        }
+        else {
+            allowedCharactersSet = CharacterSet.decimalDigits
+            allowedCharactersSet.insert("+")
+        }
 		return string.components(separatedBy: allowedCharactersSet.inverted).joined(separator: "")
 	}
 
