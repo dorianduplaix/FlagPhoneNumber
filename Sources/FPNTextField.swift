@@ -402,7 +402,9 @@ open class FPNTextField: UITextField {
 		if hasPhoneNumberExample == true {
 			updatePlaceholder()
 		}
-		didEditText()
+        if noPhoneNumber == false {
+            didEditText()
+        }
 	}
 
 	private func clean(string: String) -> String {
